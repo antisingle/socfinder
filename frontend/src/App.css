@@ -1,64 +1,399 @@
+/* Общие стили */
 .App {
-  text-align: center;
-}
-
-.App-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 40px 20px;
-  color: white;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-.App-header h1 {
-  margin-bottom: 20px;
-  font-size: 3em;
+/* Заголовок */
+.app-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.app-header h1 {
+  margin: 0 0 10px 0;
+  font-size: 2.5em;
   text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
-.App-header p {
-  margin: 10px 0;
+.app-header p {
+  margin: 0;
   font-size: 1.2em;
   opacity: 0.9;
 }
 
-.stats {
+/* Загрузка */
+.loading, .error {
   display: flex;
-  gap: 30px;
-  margin-top: 40px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+  padding: 20px;
+}
+
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #667eea;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin-top: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error button {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  font-size: 16px;
+}
+
+.error button:hover {
+  background: #5a67d8;
+}
+
+/* Панель статистики */
+.stats-panel {
+  background: white;
+  margin: 20px;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.stats-panel h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #2d3748;
+  font-size: 1.8em;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
 }
 
 .stat-item {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 20px 30px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 25px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.stat-item:hover {
+  transform: translateY(-2px);
+}
+
+.stat-number {
+  font-size: 2em;
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.stat-label {
+  font-size: 0.9em;
+  opacity: 0.9;
+}
+
+/* Переключатель режимов */
+.view-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px;
+}
+
+.view-controls button {
+  background: white;
+  border: 2px solid #667eea;
+  color: #667eea;
+  padding: 12px 24px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.view-controls button:hover {
+  background: #f0f4ff;
+}
+
+.view-controls button.active {
+  background: #667eea;
+  color: white;
+}
+
+/* Панель поиска */
+.search-panel {
+  margin: 20px;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.2s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.search-results {
+  color: #718096;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Основной контент */
+.main-content {
+  margin: 20px;
+  background: white;
   border-radius: 15px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Заглушка карты */
+.map-placeholder {
+  padding: 40px;
+  text-align: center;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: linear-gradient(45deg, #f0f9ff 0%, #e0f2fe 100%);
+}
+
+.map-placeholder h3 {
+  font-size: 2em;
+  margin-bottom: 20px;
+  color: #0369a1;
+}
+
+.map-placeholder p {
+  font-size: 1.1em;
+  color: #0369a1;
+  margin-bottom: 10px;
+}
+
+.map-mock {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.map-region {
+  background: rgba(102, 126, 234, 0.1);
+  border: 2px solid #667eea;
+  border-radius: 12px;
+  padding: 20px;
+  font-size: 1.1em;
+  font-weight: 500;
+  color: #667eea;
   min-width: 150px;
 }
 
-.stat-item strong {
-  display: block;
-  font-size: 1.5em;
-  margin-bottom: 5px;
-  color: #fff;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+/* Таблица */
+.table-container {
+  padding: 30px;
 }
 
+.table-container h3 {
+  margin-bottom: 20px;
+  font-size: 1.8em;
+  color: #2d3748;
+  text-align: center;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.projects-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.projects-table th {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 15px 12px;
+  text-align: left;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.projects-table td {
+  padding: 12px;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: top;
+}
+
+.projects-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.project-name {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.organization {
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #4a5568;
+}
+
+.status {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85em;
+  font-weight: 500;
+}
+
+.status.winner {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.status.participant {
+  background: #f8f9fa;
+  color: #6c757d;
+  border: 1px solid #dee2e6;
+}
+
+.money {
+  font-weight: 600;
+  color: #2d3748;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.table-footer {
+  padding: 15px;
+  text-align: center;
+  background: #f8fafc;
+  color: #718096;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* Подвал */
+.app-footer {
+  background: #2d3748;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.app-footer p {
+  margin: 5px 0;
+  opacity: 0.8;
+}
+
+/* Адаптивность */
 @media (max-width: 768px) {
-  .stats {
-    flex-direction: column;
+  .app-header h1 {
+    font-size: 2em;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 15px;
   }
   
   .stat-item {
-    min-width: auto;
+    padding: 20px 15px;
+  }
+  
+  .stat-number {
+    font-size: 1.5em;
+  }
+  
+  .view-controls {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .view-controls button {
     width: 200px;
+  }
+  
+  .search-panel {
+    margin: 10px;
+    padding: 15px;
+  }
+  
+  .main-content {
+    margin: 10px;
+  }
+  
+  .table-container {
+    padding: 15px;
+  }
+  
+  .projects-table th,
+  .projects-table td {
+    padding: 8px 6px;
+    font-size: 0.9em;
+  }
+  
+  .project-name {
+    max-width: 200px;
+  }
+  
+  .organization {
+    max-width: 150px;
+  }
+  
+  .map-mock {
+    flex-direction: column;
+    align-items: center;
   }
 }
