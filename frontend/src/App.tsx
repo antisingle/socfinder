@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import ProjectMap from './components/ProjectMap';
 import './App.css';
 
 // Типы данных
@@ -176,15 +177,10 @@ function App() {
       {/* Основной контент */}
       <main className="main-content">
         {viewMode === 'map' ? (
-          <div className="map-placeholder">
+          <div className="map-container">
             <h3>🗺️ Карта проектов</h3>
-            <p>Здесь будет интерактивная карта с точками проектов</p>
-            <p>📍 {filteredProjects.length} проектов для отображения</p>
-            <div className="map-mock">
-              <div className="map-region">🏛️ Москва ({filteredProjects.filter(p => p.region?.includes('Москва')).length})</div>
-              <div className="map-region">🏭 Санкт-Петербург ({filteredProjects.filter(p => p.region?.includes('Санкт-Петербург')).length})</div>
-              <div className="map-region">🌾 Регионы ({filteredProjects.filter(p => p.region && !p.region.includes('Москва') && !p.region.includes('Санкт-Петербург')).length})</div>
-            </div>
+            <p>📍 {filteredProjects.length} проектов на карте</p>
+            <ProjectMap projects={filteredProjects} />
           </div>
         ) : (
           <div className="table-container">
