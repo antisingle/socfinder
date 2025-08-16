@@ -1,0 +1,70 @@
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=socfinder
+      - POSTGRES_USER=socfinder
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-socfinder_secure_2025}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U socfinder"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - socfinder_network
+
+  backend:
+    build: ./backend
+    environment:
+      - DATABASE_URL=postgresql://socfinder:${POSTGRES_PASSWORD:-socfinder_secure_2025}@postgres:5432/socfinder
+      - ENVIRONMENT=production
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    volumes:
+      - ./data:/app/data
+    networks:
+      - socfinder_network
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=${API_URL:-http://localhost/api}
+    restart: unless-stopped
+    networks:
+      - socfinder_network
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - static_files:/var/www/static
+    depends_on:
+      - backend
+      - frontend
+    restart: unless-stopped
+    networks:
+      - socfinder_network
+
+volumes:
+  postgres_data:
+  static_files:
+
+networks:
+  socfinder_network:
+    driver: bridge
