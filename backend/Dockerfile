@@ -18,5 +18,5 @@ COPY . .
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
 USER appuser
 
-# Запускаем загрузку данных в PostgreSQL при старте контейнера
-CMD ["sh", "-c", "python data/scripts/load_to_postgres.py && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+# Запускаем оптимизированную загрузку данных в PostgreSQL при старте контейнера
+CMD ["sh", "-c", "python data/scripts/load_to_postgres_optimized.py && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
