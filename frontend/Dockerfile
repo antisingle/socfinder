@@ -1,12 +1,16 @@
 FROM node:18-alpine
 
+# Добавить аргументы для переменных окружения
+ARG REACT_APP_API_URL
+ENV REACT_APP_API_URL=$REACT_APP_API_URL
+
 WORKDIR /app
 
 # Копируем package.json
 COPY package.json ./
 
 # Устанавливаем зависимости
-RUN npm install --production
+RUN npm install 
 
 # Копируем исходный код
 COPY . .

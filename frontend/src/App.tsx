@@ -25,7 +25,8 @@ interface Stats {
   organizations_count: number;
 }
 
-const API_URL = process.env.REACT_APP_API_URL || '';
+// const API_URL = process.env.REACT_APP_API_URL || '';
+const API_URL = 'http://antisingle.fvds.ru:8001/api';
 
 function App() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -123,15 +124,15 @@ function App() {
           <h2>Общая статистика</h2>
           <div className="stats-grid">
             <div className="stat-item">
-              <div className="stat-number">{stats.total_projects.toLocaleString('ru-RU')}</div>
+              <div className="stat-number">{stats?.total_projects?.toLocaleString('ru-RU') || 0}</div>
               <div className="stat-label">Всего проектов</div>
             </div>
             <div className="stat-item">
-              <div className="stat-number">{stats.total_winners.toLocaleString('ru-RU')}</div>
+              <div className="stat-number">{stats?.total_winners?.toLocaleString('ru-RU') || 0}</div>
               <div className="stat-label">Победителей</div>
             </div>
             <div className="stat-item">
-              <div className="stat-number">{formatMoney(stats.total_money)}</div>
+              <div className="stat-number">{formatMoney(stats?.total_money || 0)}</div>
               <div className="stat-label">Общая сумма грантов</div>
             </div>
             <div className="stat-item">
@@ -139,7 +140,7 @@ function App() {
               <div className="stat-label">Регионов</div>
             </div>
             <div className="stat-item">
-              <div className="stat-number">{stats.organizations_count.toLocaleString('ru-RU')}</div>
+              <div className="stat-number">{stats?.organizations_count?.toLocaleString('ru-RU') || 0}</div>
               <div className="stat-label">Организаций</div>
             </div>
           </div>
@@ -199,7 +200,7 @@ function App() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredProjects.slice(0, 100).map((project) => (
+                  {Array.isArray(filteredProjects) && filteredProjects.slice(0, 100).map((project) => (
                     <tr key={project.id}>
                       <td className="project-name" title={project.name}>
                         {project.name}
