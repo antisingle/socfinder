@@ -18,7 +18,7 @@ class StatsService:
         return {
             "total_projects": total_projects,
             "total_winners": total_winners,
-            "total_money": total_money,
+            "total_money": float(total_money) if total_money else 0.0,
             "regions_count": regions_count,
             "organizations_count": organizations_count
         }
@@ -42,7 +42,7 @@ class StatsService:
                 "region": region,
                 "projects_count": projects_count,
                 "winners_count": winners_count or 0,
-                "total_money": total_money or 0
+                "total_money": float(total_money) if total_money else 0.0
             }
             for region, projects_count, winners_count, total_money in stats
         ]
@@ -66,7 +66,7 @@ class StatsService:
                 "year": year,
                 "projects_count": projects_count,
                 "winners_count": winners_count or 0,
-                "total_money": total_money or 0
+                "total_money": float(total_money) if total_money else 0.0
             }
             for year, projects_count, winners_count, total_money in stats
         ]

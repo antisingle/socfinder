@@ -10,7 +10,7 @@ router = APIRouter()
 class OverviewStats(BaseModel):
     total_projects: int
     total_winners: int
-    total_money: int
+    total_money: float
     regions_count: int
     organizations_count: int
 
@@ -18,13 +18,13 @@ class RegionStats(BaseModel):
     region: str
     projects_count: int
     winners_count: int
-    total_money: int
+    total_money: float
 
 class YearStats(BaseModel):
     year: int
     projects_count: int
     winners_count: int
-    total_money: int
+    total_money: float
 
 @router.get("/stats/overview", response_model=OverviewStats)
 def get_overview_stats(db: Session = Depends(get_db)):

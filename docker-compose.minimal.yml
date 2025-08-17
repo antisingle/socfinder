@@ -9,6 +9,8 @@ services:
       - POSTGRES_INITDB_ARGS=--data-checksums
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"  # Экспортируем порт наружу
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U socfinder"]
@@ -64,8 +66,8 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - REACT_APP_API_URL=${API_URL:-http://localhost/api}
-      - NODE_OPTIONS=--max_old_space_size=128  # Ограичение памяти для Node.js
+      - REACT_APP_API_URL=http://nginx/api
+      - NODE_OPTIONS=--max_old_space_size=128  # Ограничение памяти для Node.js
     restart: unless-stopped
     networks:
       - socfinder_network

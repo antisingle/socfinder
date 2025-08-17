@@ -8,12 +8,13 @@ interface Project {
   id: number;
   name: string;
   region: string;
-  organization: string;
+  org: string;  // Изменено с organization на org
   winner: boolean;
   money_req_grant: number;
   year?: number;
-  lat?: number;
-  lng?: number;
+  direction?: string;
+  contest?: string;
+  coordinates?: { lat: number; lng: number };
 }
 
 interface Stats {
@@ -24,7 +25,7 @@ interface Stats {
   organizations_count: number;
 }
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8001';
+const API_URL = process.env.REACT_APP_API_URL || '';
 
 function App() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -41,12 +42,13 @@ function App() {
       try {
         setLoading(true);
         
-        // Загружаем статистику
-        const statsResponse = await axios.get(`${API_URL}/api/v1/stats/overview`);
+        // Загружаем статистику (используем API_URL)
+        console.log('API_URL:', API_URL);
+        const statsResponse = await axios.get(`${API_URL}/v1/stats/overview`);
         setStats(statsResponse.data);
 
-        // Загружаем проекты
-        const projectsResponse = await axios.get(`${API_URL}/api/v1/projects?limit=1000`);
+        // Загружаем проекты (ограничим до 10 для стабильности)
+        const projectsResponse = await axios.get(`${API_URL}/v1/projects?limit=10`);
         setProjects(projectsResponse.data);
         setFilteredProjects(projectsResponse.data);
         
@@ -70,7 +72,7 @@ function App() {
       const filtered = projects.filter(project =>
         project.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         project.region?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        project.organization?.toLowerCase().includes(searchTerm.toLowerCase())
+        project.org?.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredProjects(filtered);
     }
@@ -203,8 +205,8 @@ function App() {
                         {project.name}
                       </td>
                       <td>{project.region}</td>
-                      <td className="organization" title={project.organization}>
-                        {project.organization}
+                      <td className="organization" title={project.org}>
+                        {project.org}
                       </td>
                       <td>
                         <span className={`status ${project.winner ? 'winner' : 'participant'}`}>

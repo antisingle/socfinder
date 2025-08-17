@@ -21,5 +21,5 @@ COPY . .
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
 USER appuser
 
-# Запускаем только FastAPI
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Запускаем восстановление из дампа и FastAPI
+CMD ["sh", "-c", "python data/scripts/restore_from_minimal_dump.py && uvicorn app.main:app --host 0.0.0.0 --port 8000"]

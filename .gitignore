@@ -81,8 +81,8 @@ tmp/
 # Data files (большие файлы не заливаем в Git)
 data/raw/*.xlsx
 data/raw/*.xls
-*.xlsx
-*.xls
+data/raw/*.*
+data/dumps/*.*
 
 # Database files
 *.db

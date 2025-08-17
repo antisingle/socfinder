@@ -15,12 +15,13 @@ interface Project {
   id: number;
   name: string;
   region: string;
-  organization: string;
+  org: string;  // Изменено с organization на org
   winner: boolean;
   money_req_grant: number;
   year?: number;
-  lat?: number;
-  lng?: number;
+  direction?: string;
+  contest?: string;
+  coordinates?: { lat: number; lng: number };
 }
 
 interface ProjectMapProps {
@@ -196,8 +197,8 @@ const ProjectMap: React.FC<ProjectMapProps> = ({ projects }) => {
                           {project.name.length > 50 && '...'}
                         </div>
                         <div style={{ color: '#4a5568', fontSize: '0.9em' }}>
-                          {project.organization?.substring(0, 40)}
-                          {project.organization && project.organization.length > 40 && '...'}
+                          {project.org?.substring(0, 40)}
+                          {project.org && project.org.length > 40 && '...'}
                         </div>
                         <div style={{ color: '#2d3748', fontWeight: '500', marginTop: '2px' }}>
                           {formatMoney(project.money_req_grant)}

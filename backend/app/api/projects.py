@@ -18,7 +18,7 @@ class ProjectResponse(BaseModel):
     region: Optional[str] = None
     org: Optional[str] = None
     winner: Optional[bool] = None
-    money_req_grant: Optional[int] = None
+    money_req_grant: Optional[float] = None
     coordinates: Optional[dict] = None
     
     @field_validator('winner', mode='before')
@@ -32,12 +32,27 @@ class ProjectResponse(BaseModel):
         from_attributes = True
 
 class ProjectDetail(ProjectResponse):
-    description: Optional[str]
-    goal: Optional[str]
-    tasks: Optional[str]
-    address: Optional[str]
-    web_site: Optional[str]
-    link: Optional[str]
+    date_req: Optional[str] = None
+    inn: Optional[str] = None
+    ogrn: Optional[str] = None
+    implem_start: Optional[str] = None
+    implem_end: Optional[str] = None
+    rate: Optional[float] = None
+    cofunding: Optional[float] = None
+    total_money: Optional[float] = None
+    description: Optional[str] = None
+    goal: Optional[str] = None
+    tasks: Optional[str] = None
+    soc_signif: Optional[str] = None
+    pj_geo: Optional[str] = None
+    target_groups: Optional[str] = None
+    address: Optional[str] = None
+    web_site: Optional[str] = None
+    req_num: Optional[str] = None
+    link: Optional[str] = None
+    okato: Optional[str] = None
+    oktmo: Optional[str] = None
+    level: Optional[str] = None
 
 class ProjectTableResponse(BaseModel):
     id: int
@@ -46,7 +61,7 @@ class ProjectTableResponse(BaseModel):
     region: Optional[str] = None
     year: Optional[int] = None
     direction: Optional[str] = None
-    money_req_grant: Optional[int] = None
+    money_req_grant: Optional[float] = None
     winner: Optional[bool] = None
     contest: Optional[str] = None
     
