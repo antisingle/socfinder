@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ProjectMap from './components/ProjectMap';
+import Pagination from './components/Pagination';
 import './App.css';
 
 // Типы данных
@@ -35,6 +36,17 @@ function App() {
   const [viewMode, setViewMode] = useState<'map' | 'table'>('table');
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
+  
+  // Состояние пагинации
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(25);
+  const [totalItems, setTotalItems] = useState(0);
+  
+  // Состояние фильтров
+  const [selectedDirection, setSelectedDirection] = useState<string | null>(null);
+  const [selectedYear, setSelectedYear] = useState<number | null>(null);
+  const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
+  const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
 
   // Загрузка данных
   useEffect(() => {
@@ -51,8 +63,10 @@ function App() {
         console.log('✅ Статистика загружена:', statsResponse.data);
         setStats(statsResponse.data);
 
-        // Загружаем проекты (ограничим до 10 для стабильности)
-        const projectsResponse = await axios.get(`${API_URL}/v1/projects?limit=10`);
+        // Загружаем проекты с ограничением для стабильности
+        console.log('📥 Загружаем проекты...');
+        const projectsResponse = await axios.get(`${API_URL}/v1/projects?limit=1000`);
+        console.log('✅ Проекты загружены:', projectsResponse.data.length, 'записей');
         setProjects(projectsResponse.data);
         setFilteredProjects(projectsResponse.data);
         
@@ -68,19 +82,56 @@ function App() {
     loadData();
   }, []);
 
-  // Поиск
+  // Поиск и фильтрация
   useEffect(() => {
-    if (!searchTerm) {
-      setFilteredProjects(projects);
-    } else {
-      const filtered = projects.filter(project =>
+    let filtered = projects;
+    
+    // Поиск по тексту
+    if (searchTerm) {
+      filtered = filtered.filter(project =>
         project.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         project.region?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         project.org?.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      setFilteredProjects(filtered);
     }
-  }, [searchTerm, projects]);
+    
+    // Фильтр по направлению
+    if (selectedDirection) {
+      filtered = filtered.filter(project => project.direction === selectedDirection);
+    }
+    
+    // Фильтр по году
+    if (selectedYear) {
+      filtered = filtered.filter(project => project.year === selectedYear);
+    }
+    
+    // Фильтр по региону
+    if (selectedRegion) {
+      filtered = filtered.filter(project => project.region === selectedRegion);
+    }
+    
+    // Фильтр по статусу
+    if (selectedStatus) {
+      if (selectedStatus === 'winner') {
+        filtered = filtered.filter(project => project.winner === true);
+      } else if (selectedStatus === 'participant') {
+        filtered = filtered.filter(project => project.winner === false);
+      }
+    }
+    
+    setFilteredProjects(filtered);
+  }, [searchTerm, selectedDirection, selectedYear, selectedRegion, selectedStatus, projects]);
+
+  // Обновление общего количества при изменении фильтров
+  useEffect(() => {
+    setTotalItems(filteredProjects.length);
+    setCurrentPage(1); // Сброс на первую страницу при изменении фильтров
+  }, [filteredProjects]);
+
+  // Вычисление данных для текущей страницы
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredProjects.slice(indexOfFirstItem, indexOfLastItem);
 
   // Форматирование денег
   const formatMoney = (amount: number) => {
@@ -166,18 +217,71 @@ function App() {
         )}
       </div>
 
-      {/* Компактная панель поиска */}
-      <div className="search-panel-compact">
-        <input
-          type="text"
-          placeholder="Поиск по названию, региону или организации..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="search-input"
-        />
-        <span className="search-results">
-          Найдено: {filteredProjects.length} из {projects.length} проектов
-        </span>
+      {/* Компактные фильтры */}
+      <div className="filters-compact">
+        <div className="search-section">
+          <input
+            type="text"
+            placeholder="Поиск по названию, региону или организации..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+          />
+          <span className="search-results">
+            {filteredProjects.length} из {projects.length}
+          </span>
+        </div>
+        <div className="filters-section">
+          <select 
+            className="filter-select direction"
+            value={selectedDirection || ''}
+            onChange={(e) => setSelectedDirection(e.target.value || null)}
+          >
+            <option value="">Направление</option>
+            {Array.from(new Set(projects.map(p => p.direction).filter(Boolean))).sort().map(direction => (
+              <option key={direction} value={direction} title={direction}>
+                {(direction || '').length > 35 ? (direction || '').substring(0, 35) + '...' : direction}
+              </option>
+            ))}
+          </select>
+          
+          <select 
+            className="filter-select year"
+            value={selectedYear || ''}
+            onChange={(e) => setSelectedYear(e.target.value ? parseInt(e.target.value) : null)}
+          >
+            <option value="">Год</option>
+            {Array.from(new Set(projects.map(p => p.year).filter(Boolean))).sort((a, b) => (b || 0) - (a || 0)).map(year => (
+              <option key={year} value={year}>{year}</option>
+            ))}
+          </select>
+          
+          <select 
+            className="filter-select region"
+            value={selectedRegion || ''}
+            onChange={(e) => setSelectedRegion(e.target.value || null)}
+          >
+            <option value="">Регион</option>
+            {Array.from(new Set(projects.map(p => p.region).filter(Boolean))).sort().map(region => (
+              <option key={region} value={region} title={region}>
+                {(region || '').length > 25 ? (region || '').substring(0, 25) + '...' : region}
+              </option>
+            ))}
+          </select>
+          
+          <select 
+            className="filter-select status"
+            value={selectedStatus || ''}
+            onChange={(e) => setSelectedStatus(e.target.value || null)}
+          >
+            <option value="">Статус</option>
+            <option value="winner">Победители</option>
+            <option value="participant">Участники</option>
+          </select>
+        </div>
+        <div className="pagination-info">
+          Показано {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, totalItems)} из {totalItems}
+        </div>
       </div>
 
       {/* Основной контент */}
@@ -189,48 +293,52 @@ function App() {
             <ProjectMap projects={filteredProjects} />
           </div>
         ) : (
-          <div className="table-container">
-            <h3>📊 Таблица проектов</h3>
-            <div className="table-wrapper">
-              <table className="projects-table">
-                <thead>
-                  <tr>
-                    <th>Название</th>
-                    <th>Регион</th>
-                    <th>Организация</th>
-                    <th>Статус</th>
-                    <th>Сумма гранта</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {Array.isArray(filteredProjects) && filteredProjects.slice(0, 100).map((project) => (
-                    <tr key={project.id}>
-                      <td className="project-name" title={project.name}>
-                        {project.name}
-                      </td>
-                      <td>{project.region}</td>
-                      <td className="organization" title={project.org}>
-                        {project.org}
-                      </td>
-                      <td>
-                        <span className={`status ${project.winner ? 'winner' : 'participant'}`}>
-                          {project.winner ? '🏆 Победитель' : '👥 Участник'}
-                        </span>
-                      </td>
-                      <td className="money">
-                        {formatMoney(project.money_req_grant)}
-                      </td>
+          <>
+            <div className="table-container">
+              <h3>📊 Таблица проектов</h3>
+              <div className="table-wrapper">
+                <table className="projects-table">
+                  <thead>
+                    <tr>
+                      <th>Название</th>
+                      <th>Регион</th>
+                      <th>Организация</th>
+                      <th>Статус</th>
+                      <th>Сумма гранта</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-              {filteredProjects.length > 100 && (
-                <div className="table-footer">
-                  Показано первых 100 из {filteredProjects.length} проектов
-                </div>
-              )}
+                  </thead>
+                  <tbody>
+                    {Array.isArray(currentItems) && currentItems.map((project) => (
+                      <tr key={project.id}>
+                        <td className="project-name" title={project.name}>
+                          {project.name}
+                        </td>
+                        <td>{project.region}</td>
+                        <td className="organization" title={project.org}>
+                          {project.org}
+                        </td>
+                        <td>
+                          <span className={`status ${project.winner ? 'winner' : 'participant'}`}>
+                            {project.winner ? '🏆 Победитель' : '👥 Участник'}
+                          </span>
+                        </td>
+                        <td className="money">
+                          {formatMoney(project.money_req_grant)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
+            {totalItems > itemsPerPage && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={Math.ceil(totalItems / itemsPerPage)}
+                onPageChange={setCurrentPage}
+              />
+            )}
+          </>
         )}
       </main>
 
