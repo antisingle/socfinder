@@ -115,59 +115,59 @@ function App() {
 
   return (
     <div className="App">
-      {/* Заголовок */}
-      <header className="app-header">
-        <h1>🎯 SocFinder</h1>
-        <p>Интерактивная платформа анализа грантов</p>
-      </header>
+      {/* Компактная верхняя панель */}
+      <div className="top-panel">
+        {/* Левая часть: заголовок */}
+        <div className="header-section">
+          <h1>🎯 SocFinder</h1>
+          <p>Интерактивная платформа анализа грантов</p>
+        </div>
 
-      {/* Статистика */}
-      {stats && (
-        <div className="stats-panel">
-          <h2>Общая статистика</h2>
-          <div className="stats-grid">
-            <div className="stat-item">
+        {/* Центральная часть: переключатели */}
+        <div className="view-controls">
+          <button
+            className={viewMode === 'map' ? 'active' : ''}
+            onClick={() => setViewMode('map')}
+          >
+            🗺️ Карта
+          </button>
+          <button
+            className={viewMode === 'table' ? 'active' : ''}
+            onClick={() => setViewMode('table')}
+          >
+            📊 Таблица
+          </button>
+        </div>
+
+        {/* Правая часть: компактная статистика */}
+        {stats && (
+          <div className="stats-compact">
+            <div className="stat-item-compact">
               <div className="stat-number">{stats?.total_projects?.toLocaleString('ru-RU') || 0}</div>
-              <div className="stat-label">Всего проектов</div>
+              <div className="stat-label">Проектов</div>
             </div>
-            <div className="stat-item">
+            <div className="stat-item-compact">
               <div className="stat-number">{stats?.total_winners?.toLocaleString('ru-RU') || 0}</div>
               <div className="stat-label">Победителей</div>
             </div>
-            <div className="stat-item">
+            <div className="stat-item-compact">
               <div className="stat-number">{formatMoney(stats?.total_money || 0)}</div>
-              <div className="stat-label">Общая сумма грантов</div>
+              <div className="stat-label">Сумма</div>
             </div>
-            <div className="stat-item">
+            <div className="stat-item-compact">
               <div className="stat-number">{stats.regions_count}</div>
               <div className="stat-label">Регионов</div>
             </div>
-            <div className="stat-item">
+            <div className="stat-item-compact">
               <div className="stat-number">{stats?.organizations_count?.toLocaleString('ru-RU') || 0}</div>
               <div className="stat-label">Организаций</div>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* Переключатель режимов */}
-      <div className="view-controls">
-        <button
-          className={viewMode === 'map' ? 'active' : ''}
-          onClick={() => setViewMode('map')}
-        >
-          🗺️ Карта
-        </button>
-        <button
-          className={viewMode === 'table' ? 'active' : ''}
-          onClick={() => setViewMode('table')}
-        >
-          📊 Таблица
-        </button>
+        )}
       </div>
 
-      {/* Поиск */}
-      <div className="search-panel">
+      {/* Компактная панель поиска */}
+      <div className="search-panel-compact">
         <input
           type="text"
           placeholder="Поиск по названию, региону или организации..."

@@ -21,6 +21,7 @@ services:
       - "8001:8000"
     environment:
       - DATABASE_URL=${DATABASE_URL}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     depends_on:
       postgres:
         condition: service_healthy
@@ -36,6 +37,7 @@ services:
       - "3000:3000"
     environment:
       - REACT_APP_API_URL=${REACT_APP_API_URL}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     depends_on:
       - backend
     # Базовые volumes (пустые для продакшена)

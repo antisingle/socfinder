@@ -92,3 +92,4 @@ data/dumps/*.*
 *.db
 *.sqlite
 *.sqlite3
+.env
