@@ -48,6 +48,10 @@ frontend/dist/
 .env.development.local
 .env.test.local
 .env.production.local
+.env.production
+
+# Docker override files (локальные переопределения)
+docker-compose.override.yml
 
 # IDE
 .vscode/
