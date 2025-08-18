@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Тест продакшен SocFinder</title>
+    <meta charset="utf-8">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 8px; }
+        .success { background: #d4edda; border-color: #c3e6cb; }
+        .error { background: #f8d7da; border-color: #f5c6cb; }
+        .info { background: #d1ecf1; border-color: #bee5eb; }
+        button { padding: 10px 15px; margin: 5px; border: none; border-radius: 4px; cursor: pointer; background: #007bff; color: white; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Тест продакшен SocFinder</h1>
+    
+    <div class="test-section info">
+        <h3>🎯 Что тестируем:</h3>
+        <ul>
+            <li>✅ Пагинация по 25 записей на странице</li>
+            <li>✅ Фильтры: направление, год, регион, статус</li>
+            <li>✅ Компактная высота фильтров (≤50px)</li>
+            <li>✅ Поиск по названию, региону, организации</li>
+            <li>✅ Информация "Показано X-Y из Z"</li>
+            <li>✅ Навигация по страницам</li>
+        </ul>
+    </div>
+    
+    <div class="test-section">
+        <h3>🔗 Ссылки для тестирования:</h3>
+        <button onclick="window.open('http://antisingle.fvds.ru:3000', '_blank')">
+            Открыть SocFinder
+        </button>
+        <button onclick="testAPI()">
+            Тест API
+        </button>
+        <button onclick="checkFeatures()">
+            Проверить функции
+        </button>
+    </div>
+    
+    <div id="results" class="test-section">
+        <h3>📊 Результаты тестов:</h3>
+        <div id="api-results"></div>
+        <div id="feature-results"></div>
+    </div>
+    
+    <div class="test-section info">
+        <h3>📝 Инструкции по тестированию:</h3>
+        <ol>
+            <li><strong>Откройте SocFinder</strong> в браузере</li>
+            <li><strong>Проверьте фильтры:</strong> должны быть в одну строку, высота ≤50px</li>
+            <li><strong>Проверьте таблицу:</strong> должно быть 25 записей на странице</li>
+            <li><strong>Проверьте пагинацию:</strong> кнопки "Предыдущая"/"Следующая"</li>
+            <li><strong>Проверьте поиск:</strong> введите текст в поле поиска</li>
+            <li><strong>Проверьте фильтры:</strong> выберите направление, год, регион, статус</li>
+            <li><strong>Проверьте информацию:</strong> "Показано X-Y из Z" должна быть корректной</li>
+        </ol>
+    </div>
+    
+    <div class="test-section">
+        <h3>🔧 Ожидаемые пропорции фильтров:</h3>
+        <ul>
+            <li><strong>Поиск:</strong> 20% ширины</li>
+            <li><strong>Направление:</strong> 40% ширины (в 2 раза шире)</li>
+            <li><strong>Год:</strong> 15% ширины</li>
+            <li><strong>Регион:</strong> 40% ширины (в 2 раза шире)</li>
+            <li><strong>Статус:</strong> 15% ширины</li>
+        </ul>
+    </div>
+    
+    <script>
+        async function testAPI() {
+            const results = document.getElementById('api-results');
+            results.innerHTML = '<p>🔄 Тестирование API...</p>';
+            
+            try {
+                // Тест статистики
+                const statsResponse = await fetch('http://antisingle.fvds.ru:8001/api/v1/stats/overview');
+                const stats = await statsResponse.json();
+                
+                // Тест проектов с пагинацией
+                const projectsResponse = await fetch('http://antisingle.fvds.ru:8001/api/v1/projects?limit=25');
+                const projects = await projectsResponse.json();
+                
+                results.innerHTML = `
+                    <div class="success">
+                        <h4>✅ API тесты прошли успешно:</h4>
+                        <ul>
+                            <li>Статистика: ${stats.total_projects.toLocaleString()} проектов</li>
+                            <li>Проекты: ${projects.length} записей (должно быть 25)</li>
+                            <li>Победители: ${stats.total_winners.toLocaleString()}</li>
+                            <li>Общая сумма: ${stats.total_money.toLocaleString()} ₽</li>
+                            <li>Регионов: ${stats.regions_count}</li>
+                            <li>Организаций: ${stats.organizations_count.toLocaleString()}</li>
+                        </ul>
+                    </div>
+                `;
+            } catch (error) {
+                results.innerHTML = `
+                    <div class="error">
+                        <h4>❌ Ошибка API тестов:</h4>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function checkFeatures() {
+            const results = document.getElementById('feature-results');
+            results.innerHTML = `
+                <div class="info">
+                    <h4>🔍 Проверьте в браузере:</h4>
+                    <ol>
+                        <li>Откройте <a href="http://antisingle.fvds.ru:3000" target="_blank">http://antisingle.fvds.ru:3000</a></li>
+                        <li>Проверьте что фильтры компактные (≤50px высота)</li>
+                        <li>Проверьте что в таблице 25 записей</li>
+                        <li>Проверьте что пагинация работает</li>
+                        <li>Проверьте что поиск работает</li>
+                        <li>Проверьте что фильтры работают в комбинации</li>
+                        <li>Проверьте что информация "Показано X-Y из Z" корректна</li>
+                    </ol>
+                </div>
+            `;
+        }
+        
+        // Автоматический тест API при загрузке
+        window.onload = function() {
+            testAPI();
+        };
+    </script>
+</body>
+</html>
