@@ -25,8 +25,7 @@ interface Stats {
   organizations_count: number;
 }
 
-// const API_URL = process.env.REACT_APP_API_URL || '';
-const API_URL = 'http://antisingle.fvds.ru:8001/api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8001/api';
 
 function App() {
   const [projects, setProjects] = useState<Project[]>([]);
