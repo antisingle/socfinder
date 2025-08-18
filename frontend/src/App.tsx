@@ -43,8 +43,12 @@ function App() {
         setLoading(true);
         
         // Загружаем статистику (используем API_URL)
-        console.log('API_URL:', API_URL);
+        console.log('🚀 Начинаем загрузку данных...');
+        console.log('📡 API_URL:', API_URL);
+        console.log('🔗 Полный URL для статистики:', `${API_URL}/v1/stats/overview`);
+        
         const statsResponse = await axios.get(`${API_URL}/v1/stats/overview`);
+        console.log('✅ Статистика загружена:', statsResponse.data);
         setStats(statsResponse.data);
 
         // Загружаем проекты (ограничим до 10 для стабильности)
