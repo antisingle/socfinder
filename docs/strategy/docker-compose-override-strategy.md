@@ -209,3 +209,5 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml --env-file .env.
 ---
 
 *Этот документ является основным руководством по архитектуре Docker Compose в проекте SocFinder.*
+
+

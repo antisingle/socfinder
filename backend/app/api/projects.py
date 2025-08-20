@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from pydantic import field_validator
+from datetime import date
 from app.core.database import get_db
 from app.models.project import Project
 from app.services.project_service import ProjectService
@@ -32,11 +33,11 @@ class ProjectResponse(BaseModel):
         from_attributes = True
 
 class ProjectDetail(ProjectResponse):
-    date_req: Optional[str] = None
+    date_req: Optional[date] = None
     inn: Optional[str] = None
     ogrn: Optional[str] = None
-    implem_start: Optional[str] = None
-    implem_end: Optional[str] = None
+    implem_start: Optional[date] = None
+    implem_end: Optional[date] = None
     rate: Optional[float] = None
     cofunding: Optional[float] = None
     total_money: Optional[float] = None
