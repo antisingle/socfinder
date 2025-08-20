@@ -53,12 +53,19 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
+        console.log('🚀 Начинаем загрузку данных...');
         setLoading(true);
         
+        console.log('📡 API_URL:', API_URL);
+        console.log('🔗 Полный URL для статистики:', `${API_URL}/v1/stats/overview`);
+        
         const statsResponse = await axios.get(`${API_URL}/v1/stats/overview`);
+        console.log('✅ Статистика загружена:', statsResponse.data);
         setStats(statsResponse.data);
 
-        const projectsResponse = await axios.get(`${API_URL}/v1/projects?limit=100000`);
+        console.log('📥 Загружаем проекты...');
+        const projectsResponse = await axios.get(`${API_URL}/v1/projects?limit=5000`);
+        console.log('✅ Проекты загружены:', projectsResponse.data.length, 'записей');
         setProjects(projectsResponse.data);
         setFilteredProjects(projectsResponse.data);
         
