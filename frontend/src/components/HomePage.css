@@ -67,6 +67,57 @@
   border-bottom: 1px solid #e9ecef;
 }
 
+/* Панель управления видом */
+.view-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.view-controls button {
+  padding: 8px 16px;
+  border: 2px solid #007bff;
+  background: white;
+  color: #007bff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.view-controls button:hover {
+  background: #e3f2fd;
+  transform: translateY(-1px);
+}
+
+.view-controls button.active {
+  background: #007bff;
+  color: white;
+}
+
+/* Кнопка навигации */
+.nav-button {
+  padding: 8px 16px;
+  border: 2px solid #28a745;
+  background: white;
+  color: #28a745;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: inline-block;
+}
+
+.nav-button:hover {
+  background: #28a745;
+  color: white;
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
 .view-toggle button {
   padding: 10px 20px;
   border: 2px solid #007bff;

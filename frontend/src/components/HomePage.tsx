@@ -159,6 +159,9 @@ const HomePage: React.FC = () => {
           >
             📊 Таблица
           </button>
+          <Link to="/problems-solutions" className="nav-button">
+            🔍 Проблемы и Решения
+          </Link>
         </div>
 
         {/* Правая часть: компактная статистика */}

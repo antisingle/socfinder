@@ -44,6 +44,31 @@ config-prod:
 	@echo "📋 Продакшен конфигурация:"
 	@docker-compose -f docker-compose.yml -f docker-compose.prod.yml config
 
+# Пакетная обработка грантов
+process-1h:
+	@echo "🚀 Запуск обработки на 1 час (60 минут)..."
+	@source ./venv/bin/activate && cd data/scripts && python time_batch_processing.py 60
+
+process-6h:
+	@echo "🚀 Запуск обработки на 6 часов (360 минут)..."
+	@source ./venv/bin/activate && cd data/scripts && python time_batch_processing.py 360
+
+process-24h:
+	@echo "🚀 Запуск обработки на 24 часа (1440 минут)..."
+	@source ./venv/bin/activate && cd data/scripts && python time_batch_processing.py 1440
+
+process-custom:
+	@echo "🚀 Запуск обработки на заданное время..."
+	@echo "Использование: make process-custom MINUTES=<количество_минут>"
+	@echo "Пример: make process-custom MINUTES=120"
+	@if [ -z "$(MINUTES)" ]; then echo "❌ Укажите MINUTES=<количество_минут>"; exit 1; fi
+	@source ./venv/bin/activate && cd data/scripts && python time_batch_processing.py $(MINUTES)
+
+# Мониторинг обработки
+monitor-processing:
+	@echo "📊 Мониторинг процесса обработки..."
+	@cd data/scripts && tail -f time_batch_processing.log
+
 # Помощь
 help:
 	@echo "🎯 SocFinder - команды разработки:"
@@ -55,3 +80,10 @@ help:
 	@echo "  make clean      - полная очистка"
 	@echo "  make config     - проверка локальной конфигурации"
 	@echo "  make config-prod - проверка продакшен конфигурации"
+	@echo ""
+	@echo "🔍 Пакетная обработка грантов:"
+	@echo "  make process-1h        - обработка на 1 час"
+	@echo "  make process-6h        - обработка на 6 часов"
+	@echo "  make process-24h       - обработка на 24 часа"
+	@echo "  make process-custom MINUTES=120 - обработка на 120 минут"
+	@echo "  make monitor-processing - мониторинг процесса"
