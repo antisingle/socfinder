@@ -251,10 +251,10 @@ async def get_solutions_stats(db: Session = Depends(get_db)):
     """
     try:
         # Общее количество решений
-        total_count = db.execute("SELECT COUNT(*) as count FROM solutions").fetchone().count
+        total_count = db.execute(text("SELECT COUNT(*) as count FROM solutions")).fetchone().count
         
         # Количество уникальных грантов с решениями
-        unique_grants = db.execute("SELECT COUNT(DISTINCT grant_id) as count FROM solutions").fetchone().count
+        unique_grants = db.execute(text("SELECT COUNT(DISTINCT grant_id) as count FROM solutions")).fetchone().count
         
         # Среднее количество решений на грант
         avg_solutions = db.execute(text("""
