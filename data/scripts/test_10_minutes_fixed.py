@@ -24,14 +24,14 @@ class Test10MinutesFixedAnalyzer:
         self.pg_manager = PostgresManager()
         self.ollama_analyzer = OllamaAnalyzer()
         self.start_time = None
-        self.max_duration = timedelta(minutes=10)
+        self.max_duration = timedelta(hours=6)
         
     def run_test(self):
         """Запуск теста на 10 минут"""
         self.start_time = datetime.now()
         end_time = self.start_time + self.max_duration
         
-        logging.info(f"🚀 Начинаю тест на 10 минут")
+        logging.info(f"🚀 Начинаю тест на 1 минуту")
         logging.info(f"⏰ Время начала: {self.start_time.strftime('%H:%M:%S')}")
         logging.info(f"⏰ Время окончания: {end_time.strftime('%H:%M:%S')}")
         
@@ -51,7 +51,7 @@ class Test10MinutesFixedAnalyzer:
         for i, winner in enumerate(winners):
             # Проверяем время
             if datetime.now() >= end_time:
-                logging.info(f"⏰ Время вышло! Обработано {processed_count} грантов за 10 минут")
+                logging.info(f"⏰ Время вышло! Обработано {processed_count} грантов за 1 минуту")
                 break
                 
             # Проверяем, не анализировали ли уже этот грант

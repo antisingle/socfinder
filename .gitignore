@@ -87,6 +87,7 @@ data/raw/*.xlsx
 data/raw/*.xls
 data/raw/*.*
 data/dumps/*.*
+data/processed/
 
 # Database files
 *.db
