@@ -55,6 +55,12 @@ class ProjectService:
             raise HTTPException(status_code=404, detail="Project not found")
         return project
     
+    def get_project_by_grant_id(self, grant_id: str) -> Optional[Project]:
+        """
+        Получить проект по grant_id (req_num)
+        """
+        return self.db.query(Project).filter(Project.req_num == grant_id).first()
+    
     def get_projects_table(
         self,
         region: Optional[str] = None,

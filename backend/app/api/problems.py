@@ -157,6 +157,7 @@ async def search_problems(
                 p.grant_id,
                 p.problem_text,
                 pr.name as project_name,
+                p.created_at
             FROM problems p
             LEFT JOIN projects pr ON p.grant_id = pr.req_num
             WHERE p.problem_text ILIKE :search_pattern

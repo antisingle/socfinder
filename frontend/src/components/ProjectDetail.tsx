@@ -34,7 +34,7 @@ interface ProjectDetailData {
 }
 
 const ProjectDetail: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id, grantId } = useParams<{ id?: string; grantId?: string }>();
   const navigate = useNavigate();
   const [project, setProject] = useState<ProjectDetailData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -46,7 +46,18 @@ const ProjectDetail: React.FC = () => {
     const fetchProject = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${API_URL}/v1/projects/${id}`);
+        let response;
+        
+        if (grantId) {
+          // Если передан grantId, используем новый endpoint
+          response = await axios.get(`${API_URL}/v1/projects/by-grant/${grantId}`);
+        } else if (id) {
+          // Если передан id, используем старый endpoint
+          response = await axios.get(`${API_URL}/v1/projects/${id}`);
+        } else {
+          throw new Error('Не указан ID проекта или grant_id');
+        }
+        
         setProject(response.data);
       } catch (err) {
         setError('Проект не найден');
@@ -56,10 +67,10 @@ const ProjectDetail: React.FC = () => {
       }
     };
 
-    if (id) {
+    if (id || grantId) {
       fetchProject();
     }
-  }, [id, API_URL]);
+  }, [id, grantId, API_URL]);
 
   const formatMoney = (amount: number | null) => {
     if (!amount) return '0 ₽';

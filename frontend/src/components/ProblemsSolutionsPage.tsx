@@ -94,8 +94,8 @@ const ProblemsSolutionsPage: React.FC = () => {
   };
 
   const handleGrantClick = (grantId: string) => {
-    // Переход на страницу деталей гранта
-    window.open(`/project/${grantId}`, '_blank');
+    // Переход на страницу деталей гранта через новый API endpoint
+    window.open(`/project/by-grant/${grantId}`, '_blank');
   };
 
   if (loading) {

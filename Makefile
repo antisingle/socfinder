@@ -87,3 +87,27 @@ help:
 	@echo "  make process-24h       - обработка на 24 часа"
 	@echo "  make process-custom MINUTES=120 - обработка на 120 минут"
 	@echo "  make monitor-processing - мониторинг процесса"
+
+# Тестирование
+test-backend:
+	cd backend && python -m pytest tests/ -v
+
+test-frontend:
+	cd frontend && npm test -- --watchAll=false
+
+test-api:
+	cd data/scripts && python test_problems_solutions_api.py
+
+test-all: test-backend test-frontend test-api
+
+# Запуск backend с тестовыми данными
+run-backend-test:
+	cd backend && python -m uvicorn app.main:app --reload --port 8001
+
+# Проверка здоровья API
+health-check:
+	curl -f http://localhost:8001/health || echo "Backend недоступен"
+
+# Полная проверка системы
+check-system: health-check test-api
+	@echo "✅ Система проверена"

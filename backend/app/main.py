@@ -17,8 +17,8 @@ app.add_middleware(
 app.include_router(projects.router, prefix="/api/v1")
 app.include_router(regions.router, prefix="/api/v1")
 app.include_router(stats.router, prefix="/api/v1")
-app.include_router(problems.router, prefix="")
-app.include_router(solutions.router, prefix="")
+app.include_router(problems.router)
+app.include_router(solutions.router)
 
 @app.get("/")
 def read_root():

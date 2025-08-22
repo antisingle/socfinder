@@ -120,3 +120,4 @@ python -c "from postgres_manager import PostgresManager; pg = PostgresManager();
 
 **Обновлено:** 22 августа 2025  
 **Статус:** Работает, готов к масштабированию 🚀
+

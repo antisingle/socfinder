@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from pydantic import field_validator
@@ -142,3 +142,14 @@ def export_projects(
 def get_project(project_id: int, db: Session = Depends(get_db)):
     service = ProjectService(db)
     return service.get_project_by_id(project_id)
+
+@router.get("/projects/by-grant/{grant_id}", response_model=ProjectDetail)
+def get_project_by_grant_id(grant_id: str, db: Session = Depends(get_db)):
+    """
+    Получить проект по grant_id (req_num)
+    """
+    service = ProjectService(db)
+    project = service.get_project_by_grant_id(grant_id)
+    if not project:
+        raise HTTPException(status_code=404, detail="Проект с указанным grant_id не найден")
+    return project
